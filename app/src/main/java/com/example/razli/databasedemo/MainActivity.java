@@ -22,16 +22,32 @@ public class MainActivity extends AppCompatActivity {
             SQLiteDatabase mDatabase = this.openOrCreateDatabase("Cats", MODE_PRIVATE, null);
 
             // Create new table in database
-            mDatabase.execSQL("CREATE TABLE IF NOT EXISTS cats (name VARCHAR, age INT(3))");
+            mDatabase.execSQL("CREATE TABLE IF NOT EXISTS kitties (name VARCHAR, age INT(3), id INTEGER PRIMARY KEY)");
 
-            // Add to database
-            mDatabase.execSQL("INSERT INTO cats (name, age) VALUES ('Rocky', 14)");
-            mDatabase.execSQL("INSERT INTO cats (name, age) VALUES ('Tabbie', 7)");
+            // Add to database. Note: Primary key is not included in the brackets. SQLite handles it automatically
+            mDatabase.execSQL("INSERT INTO kitties (name, age) VALUES ('Rocky', 14)");
+            mDatabase.execSQL("INSERT INTO kitties (name, age) VALUES ('Tabbie', 7)");
+            mDatabase.execSQL("INSERT INTO kitties (name, age) VALUES ('Mindie', 7)");
+            mDatabase.execSQL("INSERT INTO kitties (name, age) VALUES ('Lucky', 18)");
 
-            Cursor resultSet = mDatabase.rawQuery("SELECT * FROM cats", null);
+            /*
+            Queries
+            SELECT * FROM kitties WHERE age < 18
+            SELECT * FROM kitties WHERE name = 'Rocky'
+            SELECT * FROM kitties WHERE name = 'Rocky' AND age = 14
+            SELECT * FROM kitties WHERE name LIKE 'R%'              // Starts with R
+            SELECT * FROM kitties WHERE name LIKE '%r%'             // Has an r
+            SELECT * FROM kitties WHERE name LIKE '%r%' LIMIT 1     // Limit to only 1 result
+
+            DELETE FROM kitties WHERE name = 'Rocky'
+            DELETE FROM kitties WHERE id = 2                        // Note this is the primary key
+            */
+
+            Cursor resultSet = mDatabase.rawQuery("SELECT * FROM kitties", null);
 
             int nameIndex = resultSet.getColumnIndex("name");
             int ageIndex = resultSet.getColumnIndex("age");
+            int idIndex = resultSet.getColumnIndex("id");
 
             // Move cursor to the starting position to start reading data
             resultSet.moveToFirst();
@@ -39,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             while (resultSet != null) {
                 Log.i(TAG, "onCreate: Name: " + resultSet.getString(nameIndex));
                 Log.i(TAG, "onCreate: Age: " + resultSet.getString(ageIndex));
+                Log.i(TAG, "onCreate: ID: " + resultSet.getString(idIndex));
 
                 // Moves to next row
                 resultSet.moveToNext();
