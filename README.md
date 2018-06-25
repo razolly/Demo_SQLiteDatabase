@@ -2,4 +2,4 @@
 Simple database. Creating, adding, fetching
 
 
-![Link](https://imgur.com/a/ETzdsFt)
+![](https://imgur.com/a/ETzdsFt)
